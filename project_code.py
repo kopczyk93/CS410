@@ -72,8 +72,13 @@ class RestaurantSearch:
         # Formats the search results for display, filtering by location if specified
         output = []
         location_match_count = 0
+
+        if not ranked_results:
+            return ["No results found."], 0
+
         # Scale every result as a percentage of the most relevant result
         top_score = rank_dict[ranked_results[0]]
+
         for doc_id in ranked_results:
             title, loc = self.documents[doc_id].split("\n")[:2]
             if location and loc != location:
@@ -107,8 +112,7 @@ class RestaurantSearch:
                 okapi_bm25 += TF * IDF * QTF
 
         return okapi_bm25
-
-
+        
 class GUI:
     def __init__(self, master):
         # Initializes the GUI elements and sets up the main window
